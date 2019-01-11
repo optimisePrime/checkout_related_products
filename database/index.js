@@ -21,18 +21,21 @@ const client = new cassandra.Client({
 client
   .connect()
   .then(() => {
+    return client.execute('DROP KEYSPACE if exists amazon;');
+  })
+  .then(() => {
     return client.execute(
-      "CREATE KEYSPACE IF NOT EXISTS amazon WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor': 1};",
+      "CREATE KEYSPACE amazon WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor': 1};",
     );
   })
   .then(() => {
     return client.execute(
-      'CREATE TABLE IF NOT EXISTS amazon.items(item_id int, name text, price decimal, stock int, onList boolean, rating int, numOfRatings int, relatedItems list<int>, imgUrl text, PRIMARY KEY (item_id));',
+      'CREATE TABLE amazon.items(item_id int, name text, price decimal, stock int, onList boolean, rating int, numOfRatings int, relatedItems text, imgUrl text, PRIMARY KEY (item_id));',
     );
   })
   .then(() => {
     return client.execute(
-      "INSERT INTO amazon.items(item_id, name ,price ,stock ,onList ,rating , numOfRatings, relatedItems , imgUrl) values (2, 'angela', 20, 1, true, 5, 200, [1, 2, 3], 'http');",
+      "INSERT INTO amazon.items(item_id, name ,price ,stock ,onList ,rating , numOfRatings, relatedItems , imgUrl) values (2, 'angela', 20, 1, true, 5, 200, '[1, 2, 3]', 'http');",
     );
   })
   .then(() => {

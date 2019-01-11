@@ -13,7 +13,7 @@ CREATE TABLE items (
 	onList boolean,
 	rating int,
 	numOfRatings int,
-	relatedItems list<int>, 
+	relatedItems text, 
 	imgUrl text,
 	PRIMARY KEY (item_id)
 );
