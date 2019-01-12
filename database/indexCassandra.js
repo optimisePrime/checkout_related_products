@@ -17,6 +17,8 @@ const client = new cassandra.Client({
 // 	relatedItems text,
 // 	imgUrl text,
 // 	PRIMARY KEY (item_id)
+module.exports = client;
+module.exports = client.connect();
 
 client
   .connect()
@@ -40,6 +42,9 @@ client
   })
   .then(() => {
     return client.execute('select * from amazon.items');
+  })
+  .then(() => {
+    return client.execute('SELECT stock FROM amazon.items WHERE item_id=1');
   })
   .then(result => {
     console.log(result.rows[0]);

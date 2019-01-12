@@ -27,7 +27,7 @@ CREATE TABLE cartItems (
 
 
 
-COPY items (item_id, name, price, stock, onList, rating, numOfRatings, relatedItems, imgUrl) FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedCart.csv' WITH HEADER = true;
+COPY items (item_id, name, price, stock, onList, rating, numOfRatings, relatedItems, imgUrl) FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedCart.csv' WITH HEADER = true and NUMPROCESSES = 4	;
 
 /*
 

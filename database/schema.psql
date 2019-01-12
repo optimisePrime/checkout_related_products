@@ -1,0 +1,26 @@
+DROP DATABASE if exists sunchamps_dev;
+
+CREATE DATABASE sunchamps_dev;
+
+\c sunchamps_dev;
+
+CREATE TABLE items (
+	item_id SERIAL PRIMARY KEY NOT NULL,
+	name varchar(30) NOT NULL,
+	price decimal NOT NULL,
+	stock int NOT NULL,
+	onList boolean,
+	rating INT NOT NULL,
+	numOfRatings INT NOT NULL,
+	relatedItems JSON NOT NULL,
+	imgUrl varchar(200) NOT NULL
+);
+
+
+CREATE TABLE cartItems (
+	item_id int NOT NULL,
+	quantity int NOT NULL
+);
+
+
+COPY items FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedCart.csv' DELIMITER ',' CSV HEADER;
