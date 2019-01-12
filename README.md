@@ -12,7 +12,7 @@
 
 ## Related Projects
 
-- https://github.com/optimisePrime/reviews-service
+- https://github.com/optimisePrime/reviews-servicegit
 - https://github.com/optimisePrime/summary-nick
 - https://github.com/optimisePrime/NavBar
 
