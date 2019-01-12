@@ -1,14 +1,12 @@
 # Project Name
 
-> Project description
+## CRUD APIs
 
-> CRUD APIs
-
-- PUT /api/product => creates a user
-- GET /api/products => returns all users
-- GET /api/product/1 => returns a single user
-- POST /api/product/1 => updates a user
-- DELETE /api/product/1 => deletes a user
+- PUT /api/product => creates a product
+- GET /api/products => returns all products
+- GET /api/product/1 => returns a single product
+- POST /api/product/1 => updates a product
+- DELETE /api/product/1 => deletes a product
 
 ## Related Projects
 
@@ -24,8 +22,6 @@
 
 ## Usage
 
-> Some usage instructions
-
 1. To seed the database:
    <!-- - fill create config.js file inside the database directory with the following format:
      ```
@@ -38,17 +34,8 @@
      ```
    - login to mysql and run schema.sql to create database
    - npm run seed (node database/seed.js), -->
-1. To start the server: npm start (nodemon server/server.js),
-1. To compile with webpack: npm run react-dev (webpack -d --watch),
-
-## Requirements
-
-An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
-
-- Node 6.13.0
-- etc
-
-## Development
+2. To start the server: npm start (nodemon server/server.js),
+3. To compile with webpack: npm run react-dev (webpack -d --watch),
 
 ### Installing Dependencies
 
