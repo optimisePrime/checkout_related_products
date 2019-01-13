@@ -23,4 +23,4 @@ CREATE TABLE cartItems (
 );
 
 
-COPY items FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedCart.csv' DELIMITER ',' CSV HEADER;
+COPY items FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedChunk.csv' DELIMITER ',' CSV HEADER;

@@ -4,10 +4,10 @@ const fs = require('fs');
 
 const writer = csvWriter();
 
-writer.pipe(fs.createWriteStream('seedCart.csv'));
+writer.pipe(fs.createWriteStream('seedCart2.csv'));
 
 // const result = [];
-const numEntries = 1000000;
+const numEntries = 5000000;
 
 for (let i = 0; i < numEntries; i += 1) {
   const item_id = i + 1;
@@ -18,9 +18,9 @@ for (let i = 0; i < numEntries; i += 1) {
   const rating = faker.random.number({ min: 0, max: 5 });
   const numOfRatings = faker.random.number({ min: 0, max: 1000 });
   const relatedItems = JSON.stringify([
-    faker.random.number({ min: 1, max: 1000000 }),
-    faker.random.number({ min: 1, max: 1000000 }),
-    faker.random.number({ min: 1, max: 1000000 }),
+    faker.random.number({ min: 1, max: 5000000 }),
+    faker.random.number({ min: 1, max: 5000000 }),
+    faker.random.number({ min: 1, max: 5000000 }),
   ]);
 
   const imgUrl = faker.image.fashion(200, 200, true);
@@ -37,6 +37,10 @@ for (let i = 0; i < numEntries; i += 1) {
     imgUrl: imgUrl,
   };
   writer.write(data);
+  if ((i + 1) % 100000 === 0) {
+    console.log(i + 1, '5 created');
+  }
+
   // result.push(data);
 }
 // result.forEach(dataObj => {

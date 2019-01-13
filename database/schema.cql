@@ -13,7 +13,7 @@ CREATE TABLE items (
 	onList boolean,
 	rating int,
 	numOfRatings int,
-	relatedItems text, 
+	relatedItems list<text>, 
 	imgUrl text,
 	PRIMARY KEY (item_id)
 );
@@ -27,7 +27,7 @@ CREATE TABLE cartItems (
 
 
 
-COPY items (item_id, name, price, stock, onList, rating, numOfRatings, relatedItems, imgUrl) FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedCart.csv' WITH HEADER = true and NUMPROCESSES = 4	;
+COPY items (item_id, name, price, stock, onList, rating, numOfRatings, relatedItems, imgUrl) FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedChunk.csv' WITH HEADER = true and NUMPROCESSES = 4	;
 
 /*
 
