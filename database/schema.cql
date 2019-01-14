@@ -13,7 +13,7 @@ CREATE TABLE items (
 	onList boolean,
 	rating int,
 	numOfRatings int,
-	relatedItems list<text>, 
+	category_id int, 
 	imgUrl text,
 	PRIMARY KEY (item_id)
 );
@@ -25,9 +25,20 @@ CREATE TABLE cartItems (
 	PRIMARY KEY (item_id)
 );
 
+CREATE TABLE category (
+	category_id int,
+	category text,
+	PRIMARY KEY (category_id)
+);
+
+INSERT INTO category (category_id, category) VALUES (1, 'electronics');
+INSERT INTO category (category_id, category) VALUES (2, 'beauty');
+INSERT INTO category (category_id, category) VALUES (3, 'books');
+INSERT INTO category (category_id, category) VALUES (4, 'music');
+INSERT INTO category (category_id, category) VALUES (5, 'arts');
 
 
-COPY items (item_id, name, price, stock, onList, rating, numOfRatings, relatedItems, imgUrl) FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedChunk.csv' WITH HEADER = true and NUMPROCESSES = 4	;
+COPY items (item_id, name, price, stock, onList, rating, numOfRatings, category_id, imgUrl) FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedChunkCat5M.csv' WITH HEADER = true and NUMPROCESSES = 4	;
 
 /*
 

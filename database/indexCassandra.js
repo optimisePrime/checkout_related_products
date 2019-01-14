@@ -4,22 +4,67 @@ const cassandra = require('cassandra-driver');
 
 const client = new cassandra.Client({
   contactPoints: ['127.0.0.1'],
-  // keyspace: 'practice',
+  keyspace: 'sunchamps_dev',
 });
+client.connect();
 
-// item_id int,
-// 	name text,
-// 	price int,
-// 	stock int,
-// 	onList boolean,
-// 	rating int,
-// 	numOfRatings int,
-// 	relatedItems text,
-// 	imgUrl text,
-// 	PRIMARY KEY (item_id)
-module.exports = client;
-module.exports = client.connect();
+//READ
+const getItem = itemId => {
+  return client
+    .execute(`SELECT * FROM items WHERE item_id = ${itemId}`)
+    .then(result => {
+      return result.rows[0];
+    });
+};
 
+//CREATE
+const addItem = (
+  itemId,
+  name,
+  price,
+  stock,
+  onList,
+  rating,
+  numOfRatings,
+  category_id,
+  imgUrl,
+) => {
+  return client
+    .execute(
+      `INSERT INTO amazon.items(item_id, name ,price ,stock ,onList ,rating , numOfRatings, category_id , imgUrl) values (${item_id}, ${name}, ${price}, ${stock}, ${onList}, ${rating}, ${numOfRatings}, ${category_id}, ${imgUrl});`,
+    )
+    .then(result => {
+      return result.rows[0];
+    });
+};
+
+// DELETE
+
+const deleteItem = itemId => {
+  return client.execute(
+    `DELETE FROM cartItems WHERE item_id=${itemId}`.then(result => {
+      return result.rows[0];
+    }),
+  );
+};
+
+//UPDATE
+const updateCart = itemId => {
+  return client
+    .execute(`UPDATE items SET onList = false WHERE item_id = ${item_id}`)
+    .then(result => {
+      return result.rows[0];
+    });
+};
+
+module.exports = {
+  getItem,
+  addItem,
+  deleteItem,
+  updateCart,
+};
+
+/*
 client
   .connect()
   .then(() => {
@@ -32,12 +77,12 @@ client
   })
   .then(() => {
     return client.execute(
-      'CREATE TABLE amazon.items(item_id int, name text, price decimal, stock int, onList boolean, rating int, numOfRatings int, relatedItems text, imgUrl text, PRIMARY KEY (item_id));',
+      'CREATE TABLE amazon.items(item_id int, name text, price decimal, stock int, onList boolean, rating int, numOfRatings int, category_id text, imgUrl text, PRIMARY KEY (item_id));',
     );
   })
   .then(() => {
     return client.execute(
-      "INSERT INTO amazon.items(item_id, name ,price ,stock ,onList ,rating , numOfRatings, relatedItems , imgUrl) values (2, 'angela', 20, 1, true, 5, 200, '[1, 2, 3]', 'http');",
+      "INSERT INTO amazon.items(item_id, name ,price ,stock ,onList ,rating , numOfRatings, category_id , imgUrl) values (2, 'angela', 20, 1, true, 5, 200, '[1, 2, 3]', 'http');",
     );
   })
   .then(() => {
@@ -54,8 +99,7 @@ client
     console.log(err);
   });
 
-/*DELETE
-DELETE FROM amazon.cartItems WHERE item_id = 1;
+
 
 
 
