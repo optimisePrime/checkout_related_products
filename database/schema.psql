@@ -10,9 +10,9 @@ CREATE TABLE items (
 	price decimal NOT NULL,
 	stock int NOT NULL,
 	onList boolean,
-	rating INT NOT NULL,
-	numOfRatings INT NOT NULL,
-	relatedItems JSON NOT NULL,
+	rating int NOT NULL,
+	numOfRatings int NOT NULL,
+	category_id int NOT NULL,
 	imgUrl varchar(200) NOT NULL
 );
 
@@ -22,5 +22,17 @@ CREATE TABLE cartItems (
 	quantity int NOT NULL
 );
 
+CREATE TABLE category (
+	category_id int,
+	category text,
+	PRIMARY KEY (category_id)
+);
 
-COPY items FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedChunk.csv' DELIMITER ',' CSV HEADER;
+INSERT INTO category (category_id, category) VALUES (1, 'electronics');
+INSERT INTO category (category_id, category) VALUES (2, 'beauty');
+INSERT INTO category (category_id, category) VALUES (3, 'books');
+INSERT INTO category (category_id, category) VALUES (4, 'music');
+INSERT INTO category (category_id, category) VALUES (5, 'arts');
+
+
+COPY items FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedChunkCatPostgres10M.csv' DELIMITER ',';

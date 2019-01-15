@@ -1,10 +1,12 @@
+//run 5 times for 5 categories, change file name and i
+
 const fs = require('fs');
 const faker = require('faker');
 
 const dataGen = () => {
-  const file = fs.createWriteStream('database/seedChunkCat5M.csv');
+  const file = fs.createWriteStream('database/seedChunkCatPostgres10M.csv');
   let i = 0;
-  const numEntries = 5000000;
+  const numEntries = 10000000;
 
   const writer = () => {
     let result = true;

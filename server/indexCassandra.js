@@ -20,9 +20,12 @@ app.use(cors());
 app.use('/:id', express.static(path.join(__dirname, '/../client/dist')));
 app.use(bodyParser.json());
 
-//READ CRUD
+const totalEntries = 5000000;
+
+//READ - get item details
 app.get('/items/:id', (req, res) => {
-  db.getItem(req.params.id)
+  const table = findTable(req.params.id);
+  db.getItem(req.params.id, table)
     .then(result => {
       res.send(result);
     })
@@ -30,9 +33,9 @@ app.get('/items/:id', (req, res) => {
       res.send(err);
     });
 });
-// add a route to get just the review rating
 
-//READ
+//original READ from cart
+//
 // app.get('/cart', (req, res) => {
 //   client.execute(
 //     'SELECT items.item_id, name, price, rating, numOfRatings, imgUrl FROM items INNER JOIN cartItems ON items.item_id = cartItems.item_id',
@@ -45,22 +48,16 @@ app.get('/items/:id', (req, res) => {
 //   );
 // });
 
-//TODO to get item details in the cart
+//TODO READ to get item details of product in the cart
+//use item_id
 app.get('/cart', (req, res) => {
-  client.execute(
-    `SELECT item_id, name, price, rating, numOfRatings, imgUrl FROM items WHERE item_id = ${
-      req.params.id
-    }`,
-    (err, results) => {
-      if (err) {
-        return res.send(err);
-      }
-      client.execute(
-        'INSERST INTO cartItems (item_id, name, price, stock, onList, rating, numOfRatings, category_id, imgUrl) VALUES ()',
-      );
-      res.send(results);
-    },
-  );
+  db.getItem(req.params.id)
+    .then(result => {
+      res.send(result);
+    })
+    .then(err => {
+      res.send(err);
+    });
 });
 
 //READ - get related products by category id
