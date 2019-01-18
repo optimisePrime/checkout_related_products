@@ -3,30 +3,27 @@ const { Pool, Client } = require('pg');
 const connectionString =
   process.env.DATABASE_URL || 'postgres://localhost:5432/';
 
-const client = pg.Client(connectionString);
+// const client = pg.Client(connectionString);
 
 const pool = new Pool({
   user: 'achou',
-  host: 'localhost',
+  host: '127.0.0.1',
   database: 'sunchamps_dev',
-  port: 5432,
+  // port: 5432,
 });
 // const client = new Client();
 
 //READ
-const selectProduct = pool.connect((err, client, done) => {
-  if (err) throw err;
+// const selectProduct = pool.connect((err, client, done) => {
+//   if (err) throw err;
+
+const selectProduct = itemId => {
   const query = 'SELECT * FROM items WHERE item_id = $1';
-  const params = [9999];
-  client.query(query, params, (err, result) => {
-    done();
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result.rows[0]);
-    }
+  const params = [itemId];
+  return pool.query(query, params).then(result => {
+    return result.rows;
   });
-});
+};
 
 // add a route to get just the review rating
 //TODO cartItem
@@ -45,49 +42,37 @@ const selectProduct = pool.connect((err, client, done) => {
 //   );
 // });
 
-pool.connect((err, client, done) => {
+//TODO
+// pool.connect((err, client, done) => {
+const findRelated = itemId => {
   const query1 = {
-    text: 'SELECT relatedItems FROM items where item_id = $1',
-    values: [100],
+    text: 'SELECT category_id FROM items where item_id = $1',
+    values: [itemId],
   };
-  client.query(query1, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result.rows[0]);
-    }
-    const related = JSON.parse(result.rows[0].relatedItems);
-
-    const query2 = {
-      text:
-        'SELECT item_id, name, price, rating, numOfRatings, imgUrl FROM items WHERE item_id = $1 OR item_id = $2 OR item_id = $3',
-      values: [related[0], related[1], related[2]],
-    };
-
-    client.query(query2, (err, result) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log(result.rows[0]);
-    });
-  });
-});
+  return pool
+    .query(query1)
+    .then(result => {
+      const categoryId = result.rows[0].category_id;
+      const query2 = {
+        text:
+          'SELECT item_id, name, price, rating, numOfRatings, imgUrl FROM items WHERE item_id > $1 and category_id = $2 limit 3',
+        values: [itemId, categoryId],
+      };
+      return pool.query(query2);
+    })
+    .then(result => result.rows);
+};
+// });
 
 //CREATE
 //TODO use a variable for quantity
-const addToCart = pool.connect((err, client, done) => {
+const addToCart = (itemId, quantity) => {
   const query = {
     text: 'INSERT INTO cartItems (item_id, quantity) VALUES ($1, $2)',
-    values: [9998, 2],
+    values: [itemId, quantity],
   };
-  client.query(query, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result.rows[0]);
-    }
-  });
-});
+  return pool.query(query);
+};
 
 //UPDATE
 const updateCart = pool.connect((err, client, done) => {
@@ -114,3 +99,11 @@ const removeItem = pool.connect((err, client, done) => {
     }
   });
 });
+
+module.exports = {
+  selectProduct,
+  findRelated,
+  // removeItem,
+  addToCart,
+  // updateCart,
+};

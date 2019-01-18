@@ -14,10 +14,8 @@ CREATE TABLE electronics (
 	rating int,
 	numOfRatings int,
 	imgUrl text,
-	PRIMARY KEY (item_id, price)
-)
-WITH CLUSTERING ORDER BY (price DESC);
-
+	PRIMARY KEY (item_id)
+);
 
 CREATE TABLE beauty (
 	item_id int,
@@ -28,9 +26,8 @@ CREATE TABLE beauty (
 	rating int,
 	numOfRatings int,
 	imgUrl text,
-	PRIMARY KEY (item_id, price)
-)
-WITH CLUSTERING ORDER BY (price DESC);
+	PRIMARY KEY (item_id)
+);
 
 CREATE TABLE books (
 	item_id int,
@@ -41,9 +38,8 @@ CREATE TABLE books (
 	rating int,
 	numOfRatings int,
 	imgUrl text,
-	PRIMARY KEY (item_id, price)
-)
-WITH CLUSTERING ORDER BY (price DESC);
+	PRIMARY KEY (item_id)
+);
 
 
 CREATE TABLE music (
@@ -55,9 +51,8 @@ CREATE TABLE music (
 	rating int,
 	numOfRatings int,
 	imgUrl text,
-	PRIMARY KEY (item_id, price)
-)
-WITH CLUSTERING ORDER BY (price DESC);
+	PRIMARY KEY (item_id)
+);
 
 CREATE TABLE arts (
 	item_id int,
@@ -68,9 +63,8 @@ CREATE TABLE arts (
 	rating int,
 	numOfRatings int,
 	imgUrl text,
-	PRIMARY KEY (item_id, price)
-)
-WITH CLUSTERING ORDER BY (price DESC);
+	PRIMARY KEY (item_id)
+);
 
 CREATE TABLE cartItems (
 	item_id int,
@@ -82,21 +76,21 @@ CREATE TABLE cartItems (
 	rating int,
 	numOfRatings int,
 	imgUrl text,
-	PRIMARY KEY (item_id, price)
-)
-WITH CLUSTERING ORDER BY (price DESC);
-
-CREATE TABLE category (
-	category_id int,
-	category text,
-	PRIMARY KEY (category_id)
+	PRIMARY KEY (item_id)
 );
 
-INSERT INTO category (category_id, category) VALUES (1, 'electronics');
-INSERT INTO category (category_id, category) VALUES (2, 'beauty');
-INSERT INTO category (category_id, category) VALUES (3, 'books');
-INSERT INTO category (category_id, category) VALUES (4, 'music');
-INSERT INTO category (category_id, category) VALUES (5, 'arts');
+
+-- CREATE TABLE category (
+-- 	category_id int,
+-- 	category text,
+-- 	PRIMARY KEY (category_id)
+-- );
+
+-- INSERT INTO category (category_id, category) VALUES (1, 'electronics');
+-- INSERT INTO category (category_id, category) VALUES (2, 'beauty');
+-- INSERT INTO category (category_id, category) VALUES (3, 'books');
+-- INSERT INTO category (category_id, category) VALUES (4, 'music');
+-- INSERT INTO category (category_id, category) VALUES (5, 'arts');
 
 
 COPY electronics (item_id, name, price, stock, onList, rating, numOfRatings, imgUrl) FROM '/Users/achou/HRsf108/SDC/related_products_checkout/database/seedChunkElectronics2M.csv';
