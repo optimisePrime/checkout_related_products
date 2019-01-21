@@ -8,6 +8,9 @@ const client = new cassandra.Client({
 });
 client.connect();
 
+// const redis = require('redis');
+// client = redis.createClient();
+
 const tableName = {
   0: 'electronics',
   1: 'beauty',
@@ -29,7 +32,6 @@ const dbToClientRow = row => {
 
 //READ
 const getItem = itemId => {
-  console.log(`${findTable(itemId)}`);
   return client
     .execute(`SELECT * FROM ${findTable(itemId)} WHERE item_id = ${itemId}`)
     .then(result => {
@@ -45,6 +47,24 @@ const getCartItem = itemId => {
     });
 };
 
+const getRelatedIds = itemId => {
+  itemId = parseInt(itemId);
+  let item1;
+  let item2;
+  let item3;
+  if (itemId % 100 > 97) {
+    item1 = itemId - 1;
+    item2 = item1 - 1;
+    item3 = item2 - 1;
+    return [item1, item2, item3];
+  } else {
+    item1 = itemId + 1;
+    item2 = item1 + 1;
+    item3 = item2 + 1;
+    return [item1, item2, item3];
+  }
+};
+
 //TODO
 // find related products -
 // checking category id
@@ -52,10 +72,11 @@ const getCartItem = itemId => {
 // (itemId: string): Promise<Rows>
 ////http://localhost:3002/item/9979753/related
 const getRelated = itemId => {
+  itemId = parseInt(itemId);
   let item1;
   let item2;
   let item3;
-  if (JSON.parse(itemId) % 100 > 97) {
+  if (itemId % 100 > 97) {
     item1 = itemId - 1;
     item2 = item1 - 1;
     item3 = item2 - 1;
@@ -72,11 +93,7 @@ const getRelated = itemId => {
       )} WHERE item_id IN (${item1}, ${item2}, ${item3} )`,
     )
     .then(result => {
-      console.log(result, 'RSULT DB');
-      result.rows.map(dbToClientRow);
-    })
-    .catch(err => {
-      console.log(err);
+      return result.rows.map(dbToClientRow);
     });
 };
 
@@ -98,7 +115,7 @@ const addItem = (
       )}(item_id, name ,price ,stock ,onList ,rating , numofratings, imgurl) values (${itemId}, ${name}, ${price}, ${stock}, ${onList}, ${rating}, ${numOfRatings}, ${imgUrl});`,
     )
     .then(result => {
-      return result.rows[0];
+      return dbToClientRow(result.rows[0]);
     });
 };
 
@@ -110,24 +127,18 @@ const addCartItem = (
   name,
   price,
   stock,
-  onlist,
+  onList,
   rating,
-  numofratings,
-  imgurl,
+  numOfRatings,
+  imgUrl,
 ) => {
   return client
     .execute(
-      `INSERT INTO cartItems (item_id, quantity, name ,price ,stock ,onlist ,rating , numofratings, imgurl) VALUES (${itemId}, ${quantity}, ${name}, ${price}, ${stock}, ${onlist}, ${rating}, ${numofratings}, ${imgurl})`,
+      `INSERT INTO cartItems (item_id, quantity, name ,price ,stock ,onlist ,rating, numofratings, imgurl) VALUES (${itemId}, ${quantity}, '${name}', ${price}, ${stock}, ${onList}, ${rating}, ${numOfRatings}, '${imgUrl}')`,
     )
     .then(result => {
       // return result.rows[0];
-      const row = result.rows[0];
-      ['onList', 'imgUrl', 'numOfRatings'].forEach(key => {
-        row[key] = row[key.toLowerCase()];
-        delete row[key.toLowerCase()];
-      });
-
-      return row;
+      return dbToClientRow(result.rows[0]);
     });
 };
 
@@ -175,6 +186,7 @@ module.exports = {
   getItem,
   getCartItem,
   getRelated,
+  getRelatedIds,
   addItem,
   addCartItem,
   deleteItem,

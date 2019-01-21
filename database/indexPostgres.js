@@ -3,19 +3,14 @@ const { Pool, Client } = require('pg');
 const connectionString =
   process.env.DATABASE_URL || 'postgres://localhost:5432/';
 
-// const client = pg.Client(connectionString);
-
 const pool = new Pool({
   user: 'achou',
   host: '127.0.0.1',
   database: 'sunchamps_dev',
   // port: 5432,
 });
-// const client = new Client();
 
 //READ
-// const selectProduct = pool.connect((err, client, done) => {
-//   if (err) throw err;
 
 const selectProduct = itemId => {
   const query = 'SELECT * FROM items WHERE item_id = $1';
@@ -43,7 +38,6 @@ const selectProduct = itemId => {
 // });
 
 //TODO
-// pool.connect((err, client, done) => {
 const findRelated = itemId => {
   const query1 = {
     text: 'SELECT category_id FROM items where item_id = $1',
@@ -65,7 +59,6 @@ const findRelated = itemId => {
 // });
 
 //CREATE
-//TODO use a variable for quantity
 const addToCart = (itemId, quantity) => {
   const query = {
     text: 'INSERT INTO cartItems (item_id, quantity) VALUES ($1, $2)',
@@ -75,35 +68,39 @@ const addToCart = (itemId, quantity) => {
 };
 
 //UPDATE
-const updateCart = pool.connect((err, client, done) => {
-  const query = `UPDATE items SET onlist = $1 WHERE item_id = $2`;
-  const params = [false, 9999];
-  client.query(query, params, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result.rows[0]);
-    }
+const updateCart = (quantity, itemId) => {
+  pool.connect((err, client) => {
+    const query = `UPDATE cartitems SET quantity = $1 WHERE item_id = $2`;
+    const params = [quantity, itemId];
+    client.query(query, params, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result.rows[0]);
+      }
+    });
   });
-});
+};
 
 //DELETE
-const removeItem = pool.connect((err, client, done) => {
-  const query = `DELETE FROM cartItems WHERE item_id = $1`;
-  const params = [9998];
-  client.query(query, params, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result.rows[0]);
-    }
+const removeCartItem = itemId => {
+  pool.connect((err, client) => {
+    const query = `DELETE FROM cartitems WHERE item_id = $1`;
+    const params = [itemId];
+    client.query(query, params, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result.rows[0]);
+      }
+    });
   });
-});
+};
 
 module.exports = {
   selectProduct,
   findRelated,
-  // removeItem,
+  removeCartItem,
   addToCart,
-  // updateCart,
+  updateCart,
 };

@@ -1,7 +1,9 @@
-// const app = require('./indexMysql.js');
-// const app = require('./indexCassandra.js');
 require('newrelic');
-const app = require('./indexPostgres.js');
+const Promise = require('bluebird');
+Promise.promisifyAll(require('redis'));
+// const app = require('./indexMysql.js');
+const app = require('./indexCassandra.js');
+// const app = require('./indexPostgres.js');
 
 const port = 3002;
 
