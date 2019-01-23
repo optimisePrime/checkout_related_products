@@ -19,6 +19,12 @@ client.on('error', err => {
 });
 
 app.use(cors());
+
+//loader io token
+app.get('/loaderio-b24f535227a687fcb663e3078231b154.txt', (req, res) => {
+  res.send('loaderio-b24f535227a687fcb663e3078231b154');
+});
+
 app.use('/:id', express.static(path.join(__dirname, '/../client/dist')));
 app.use(bodyParser.json());
 
@@ -26,7 +32,7 @@ const totalEntries = 5000000;
 
 //READ - get item details
 // Redis
-
+/*
 app.get('/items/:id', (req, res) => {
   client.get(req.params.id, (err, result) => {
     if (err) {
@@ -54,9 +60,10 @@ app.get('/items/:id', (req, res) => {
     }
   });
 });
+*/
 
 // no redis
-/*
+
 app.get('/items/:id', (req, res) => {
   // console.log(req.params.id);
   db.getItem(req.params.id)
@@ -67,7 +74,6 @@ app.get('/items/:id', (req, res) => {
       res.send(err);
     });
 });
-*/
 
 //original READ from cart
 //
@@ -97,7 +103,7 @@ app.get('/cart', (req, res) => {
 
 //READ - get related products by category_id
 //Redis
-
+/*
 app.get('/items/:id/related', (req, res) => {
   client
     .getAsync(req.params.id + '-related')
@@ -137,10 +143,10 @@ app.get('/items/:id/related', (req, res) => {
     })
     .catch(err => res.send(err));
 });
-
+*/
 //READ - get related products by category id
 // no redis
-/*
+
 app.get('/items/:id/related', (req, res) => {
   db.getRelated(req.params.id)
     .then(result => {
@@ -150,7 +156,6 @@ app.get('/items/:id/related', (req, res) => {
       res.send(err);
     });
 });
-*/
 
 // item_id, quantity, name ,price ,stock ,onList ,rating , numOfRatings, imgUrl)
 //CREATE - add to cart

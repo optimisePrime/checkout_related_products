@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const db = require('../database/indexMysql.js');
 
 app.use(cors());
+
 app.use('/:id', express.static(path.join(__dirname, '/../client/dist')));
 app.use(bodyParser.json());
 
