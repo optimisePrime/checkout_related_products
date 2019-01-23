@@ -160,6 +160,7 @@ app.get('/items/:id/related', (req, res) => {
 // item_id, quantity, name ,price ,stock ,onList ,rating , numOfRatings, imgUrl)
 //CREATE - add to cart
 // Redis
+/*
 app.post('/cart/:id', (req, res) => {
   client.get(req.params.id, (err, result) => {
     if (err) {
@@ -195,6 +196,32 @@ app.post('/cart/:id', (req, res) => {
           });
       });
     }
+  });
+});
+*/
+
+//No Redis
+
+app.post('/cart/:id', (req, res) => {
+  db.getItem(req.params.id).then(result => {
+    db.addCartItem(
+      req.params.id,
+      req.body.quantity,
+      result.name,
+      result.price,
+      result.stock,
+      result.onList,
+      result.rating,
+      result.numOfRatings,
+      result.imgUrl,
+    )
+      .then(result => {
+        res.send(result);
+        return result;
+      })
+      .catch(err => {
+        res.send(err);
+      });
   });
 });
 
