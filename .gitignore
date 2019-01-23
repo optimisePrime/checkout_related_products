@@ -4,3 +4,4 @@ master_plan
 .DS_Store
 client/dist/bundle.js
 *.csv
+newrelic_agent.log
