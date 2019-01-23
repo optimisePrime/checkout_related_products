@@ -42,8 +42,6 @@ app.get('/items/:id', (req, res) => {
     } else {
       db.getItem(req.params.id)
         .then(result => {
-          // console.log(typeof result);
-          // console.log(result, 'SERV');
           result = '[' + JSON.stringify(result) + ']';
           res.writeHead(200, { 'Content-Type': 'application/json' });
 
