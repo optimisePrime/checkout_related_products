@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import buttons from './buttonStyles.jsx';
 import AddToCart from './addToCart.jsx';
 
-const BuyNow = styled(buttons.StyledButton) `
+const BuyNow = styled(buttons.StyledButton)`
   background: linear-gradient(to bottom,#f6c88f,#ed9220);
   border-color: #ca7c1b #be751a #a56616;
 }
@@ -22,13 +22,13 @@ const BuyNow = styled(buttons.StyledButton) `
   :hover:active {
     border-color:#be751a #b26d18 #9a5f15;  
   }
-`
+`;
 
-const BuyIcon = styled(buttons.Icon) `
+const BuyIcon = styled(buttons.Icon)`
   background-image: url(https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS@variables-sprite_2x-13acd72bb22e0c502de00d0afe21c494871da686._V2_.png);
   background-position: -35px -60px;
   background-size: 400px 900px;
-`
+`;
 class purchaseOptions extends React.Component {
   constructor(props) {
     super(props);
@@ -38,19 +38,19 @@ class purchaseOptions extends React.Component {
 
   addToCart() {
     $.ajax({
-      url: `http://localhost:3002/cart/${this.props.item.item_id}`,
+      url: `/cart/${this.props.item.item_id}`,
       method: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({quantity: 4}),
+      data: JSON.stringify({ quantity: 4 }),
       success: () => {
         console.log('added to cart');
       },
-      error: (err) => {
+      error: err => {
         console.log(err);
-      }
-    })
+      },
+    });
   }
-  
+
   render() {
     return (
       <div>
@@ -60,7 +60,7 @@ class purchaseOptions extends React.Component {
           Buy Now
         </BuyNow>
       </div>
-    )
+    );
   }
 }
 

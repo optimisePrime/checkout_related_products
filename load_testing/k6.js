@@ -36,7 +36,7 @@ export default function() {
   } else {
     item_id = Math.floor(Math.random() * 1000) + 1;
   }
-  http.get(`http://localhost:3002/items/${item_id}/related`);
+  http.get(`/items/${item_id}/related`);
   // sleep(1);
 }
 
