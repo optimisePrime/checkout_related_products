@@ -3,7 +3,8 @@
 const cassandra = require('cassandra-driver');
 
 const client = new cassandra.Client({
-  contactPoints: ['127.0.0.1'],
+  // contactPoints: ['127.0.0.1'],
+  contactPoints: ['ec2-18-188-25-14.us-east-2.compute.amazonaws.com:9042'],
   keyspace: 'sunchamps_dev',
 });
 client.connect();

@@ -11,13 +11,13 @@ const db = require('../database/indexCassandra.js');
 const useRedis = process.env.USE_REDIS === 'true';
 console.log(`Using Redis: ${useRedis}`);
 
-//change protocol and port for Redis EC2
+// change protocol and port for Redis EC2
 const client = redis.createClient(
   'redis://ec2-3-16-36-188.us-east-2.compute.amazonaws.com:6379',
 );
 
 client.on('connect', () => {
-  console.log(`connected to redis`);
+  console.log('connected to redis');
 });
 client.on('error', err => {
   console.log(`Error: ${err}`);
@@ -25,7 +25,7 @@ client.on('error', err => {
 
 app.use(cors());
 
-//loader io token
+// loader io token
 app.get('/loaderio-b24f535227a687fcb663e3078231b154.txt', (req, res) => {
   res.send('loaderio-b24f535227a687fcb663e3078231b154');
 });
@@ -44,9 +44,7 @@ if (useRedis) {
       }
       if (result !== null) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        console.log('before');
         res.end(result);
-        console.log('after');
         // res.send([JSON.parse(result)]);
       } else {
         db.getItem(req.params.id)
