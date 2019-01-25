@@ -84,6 +84,7 @@ if (useRedis) {
 app.get('/cart/list', (req, res) => {
   db.getCartItems()
     .then(result => {
+      console.log(result, 'RESULT');
       res.send(result);
     })
     .catch(err => {
