@@ -40,12 +40,18 @@ const getItem = itemId => {
     });
 };
 
-const getCartItem = itemId => {
-  return client
-    .execute(`SELECT * FROM cartItems WHERE item_id = ${itemId}`)
-    .then(result => {
-      return dbToClientRow(result.rows[0]);
-    });
+// const getCartItem = itemId => {
+//   return client
+//     .execute(`SELECT * FROM cartItems WHERE item_id = ${itemId}`)
+//     .then(result => {
+//       return dbToClientRow(result.rows[0]);
+//     });
+// };
+
+const getCartItem = () => {
+  return client.execute(`SELECT * FROM cartItems`).then(result => {
+    return dbToClientRow(result.rows[0]);
+  });
 };
 
 const getRelatedIds = itemId => {

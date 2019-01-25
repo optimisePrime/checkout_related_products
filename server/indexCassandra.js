@@ -75,7 +75,7 @@ if (useRedis) {
 }
 
 app.get('/cart', (req, res) => {
-  db.getItem(req.params.id)
+  db.getCartItem()
     .then(result => {
       res.send(result);
     })
