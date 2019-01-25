@@ -81,7 +81,7 @@ if (useRedis) {
   });
 }
 
-app.get('/cart', (req, res) => {
+app.get('/cart/list', (req, res) => {
   db.getCartItems()
     .then(result => {
       res.send(result);
