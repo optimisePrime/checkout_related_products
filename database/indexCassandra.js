@@ -48,7 +48,7 @@ const getItem = itemId => {
 //     });
 // };
 
-const getCartItem = () => {
+const getCartItems = () => {
   return client.execute(`SELECT * FROM cartItems`).then(result => {
     return dbToClientRow(result.rows[0]);
   });
@@ -191,7 +191,7 @@ const updateCartItem = (itemId, quantity) => {
 
 module.exports = {
   getItem,
-  getCartItem,
+  getCartItems,
   getRelated,
   getRelatedIds,
   addItem,

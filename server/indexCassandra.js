@@ -12,16 +12,20 @@ const useRedis = process.env.USE_REDIS === 'true';
 console.log(`Using Redis: ${useRedis}`);
 
 // change protocol and port for Redis EC2
-const client = redis.createClient(
-  'redis://ec2-3-16-36-188.us-east-2.compute.amazonaws.com:6379',
-);
+const client = useRedis
+  ? redis.createClient(
+      'redis://ec2-3-16-36-188.us-east-2.compute.amazonaws.com:6379',
+    )
+  : null;
 
-client.on('connect', () => {
-  console.log('connected to redis');
-});
-client.on('error', err => {
-  console.log(`Error: ${err}`);
-});
+if (useRedis) {
+  client.on('connect', () => {
+    console.log('connected to redis');
+  });
+  client.on('error', err => {
+    console.log(`Error: ${err}`);
+  });
+}
 
 app.use(cors());
 
@@ -39,7 +43,8 @@ if (useRedis) {
   app.get('/items/:id', (req, res) => {
     client.get(req.params.id, (err, result) => {
       if (err) {
-        res.send(err);
+        console.log(err, `Error getting item ${req.params.id} from Redis`);
+        res.status(500).end(err);
         return;
       }
       if (result !== null) {
@@ -56,7 +61,8 @@ if (useRedis) {
             client.set(req.params.id, result);
           })
           .catch(err => {
-            res.send(err);
+            console.log(err, `Error getting item ${req.params.id}`);
+            res.status(500).send(err);
           });
       }
     });
@@ -69,18 +75,20 @@ if (useRedis) {
         res.send([result]);
       })
       .catch(err => {
-        res.send(err);
+        console.log(err, `Error getting item ${req.params.id}`);
+        res.status(500).send(err);
       });
   });
 }
 
 app.get('/cart', (req, res) => {
-  db.getCartItem()
+  db.getCartItems()
     .then(result => {
       res.send(result);
     })
     .catch(err => {
-      res.send(err);
+      console.log(err, 'Error getting cart items');
+      res.status(500).send(err);
     });
 });
 
@@ -118,11 +126,15 @@ if (useRedis) {
               client.set(req.params.id + '-related', JSON.stringify(ids));
             })
             .catch(err => {
-              res.send(err);
+              console.log(err, 'Error getting items');
+              res.status(500).send(err);
             });
         }
       })
-      .catch(err => res.send(err));
+      .catch(err => {
+        console.log(err, 'error getting related');
+        res.status(500).send(err);
+      });
   });
 } else {
   app.get('/items/:id/related', (req, res) => {
@@ -131,7 +143,8 @@ if (useRedis) {
         res.send(result);
       })
       .catch(err => {
-        res.send(err);
+        console.log(err, 'Error getting related items');
+        res.status(500).send(err);
       });
   });
 }
@@ -139,40 +152,31 @@ if (useRedis) {
 // CREATE - add to cart
 if (useRedis) {
   app.post('/cart/:id', (req, res) => {
-    client.get(req.params.id, (err, result) => {
-      if (err) {
-        res.send(err);
-      }
-      if (result !== null) {
-        res.send(JSON.parse(result));
-      } else {
-        db.getItem(req.params.id)
-          .then(result => {
-            // console.log(result.onList, ' server RESULT');
-            return db.addCartItem(
-              req.params.id,
-              req.body.quantity,
-              result.name,
-              result.price,
-              result.stock,
-              result.onList,
-              result.rating,
-              result.numOfRatings,
-              result.imgUrl,
-            );
-          })
-          .then(result => {
-            res.send(result);
-            return result;
-          })
-          .then(result => {
-            client.set(req.params.id, JSON.stringified(result));
-          })
-          .catch(err => {
-            res.send(err);
-          });
-      }
-    });
+    client
+      .getAsync(req.params.id)
+      .then(result => {
+        return result !== null ? JSON.parse(result) : db.getItem(req.params.id);
+      })
+      .then(item => {
+        return db.addCartItem(
+          req.params.id,
+          req.body.quantity,
+          item.name,
+          item.price,
+          item.stock,
+          item.onList,
+          item.rating,
+          item.numOfRatings,
+          item.imgUrl,
+        );
+      })
+      .then(result => {
+        res.send(result);
+      })
+      .catch(err => {
+        console.log(err, 'ERROR adding to cart');
+        res.status(500).send(err);
+      });
   });
 } else {
   app.post('/cart/:id', (req, res) => {
@@ -192,7 +196,8 @@ if (useRedis) {
           res.send(result);
         })
         .catch(err => {
-          res.send(err);
+          console.log(err, 'Error adding to cart');
+          res.status(500).send(err);
         });
     });
   });
@@ -204,7 +209,8 @@ app.patch('/cart/:id', (req, res) => {
       res.send(result);
     })
     .catch(err => {
-      res.send(err);
+      console.log(err, 'Error updating cart');
+      res.status(500).send(err);
     });
 });
 
@@ -215,7 +221,8 @@ app.delete('/cart/:id', (req, res) => {
       res.send(result);
     })
     .catch(err => {
-      res.send(err);
+      console.log(err, 'Error deleting from cart');
+      res.status(500).send(err);
     });
 });
 
