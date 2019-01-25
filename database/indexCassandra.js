@@ -139,7 +139,6 @@ const addCartItem = (
   numOfRatings,
   imgUrl,
 ) => {
-  console.log(name, 'name', rating, 'rating', imgUrl, 'img');
   return client
     .execute(
       `INSERT INTO cartItems (item_id, quantity, name ,price ,stock ,onlist ,rating, numofratings, imgurl) VALUES (${itemId}, ${quantity}, '${name}', ${price}, ${stock}, ${onList}, ${rating}, ${numOfRatings}, '${imgUrl}')`,
