@@ -144,7 +144,7 @@ const addCartItem = (
       `INSERT INTO cartItems (item_id, quantity, name ,price ,stock ,onlist ,rating, numofratings, imgurl) VALUES (${itemId}, ${quantity}, '${name}', ${price}, ${stock}, ${onList}, ${rating}, ${numOfRatings}, '${imgUrl}')`,
     )
     .then(result => {
-      // return result.rows[0];
+      console.log(result.rows[0], 'ROW [0])', rresult.rows, 'ROW');
       return dbToClientRow(result.rows[0]);
     });
 };
