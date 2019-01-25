@@ -155,9 +155,11 @@ if (useRedis) {
     client
       .getAsync(req.params.id)
       .then(result => {
+        console.log(typeof result, result, 'RESULT TYPE AND VALUE');
         return result !== null ? JSON.parse(result) : db.getItem(req.params.id);
       })
       .then(item => {
+        console.log(item, 'ITEM');
         return db.addCartItem(
           req.params.id,
           req.body.quantity,
