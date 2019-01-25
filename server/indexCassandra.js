@@ -155,7 +155,9 @@ if (useRedis) {
     client
       .getAsync(req.params.id)
       .then(result => {
-        return result !== null ? JSON.parse(result) : db.getItem(req.params.id);
+        return result !== null
+          ? JSON.parse(result)[0]
+          : db.getItem(req.params.id);
       })
       .then(item => {
         return db.addCartItem(
