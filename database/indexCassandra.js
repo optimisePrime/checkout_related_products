@@ -50,7 +50,7 @@ const getItem = itemId => {
 
 const getCartItems = () => {
   return client.execute(`SELECT * FROM cartItems`).then(result => {
-    return dbToClientRow(result.rows);
+    return result.rows.map(dbToClientRow);
   });
 };
 
