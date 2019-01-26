@@ -14,6 +14,6 @@ export default function() {
   //   `http://ec2-3-16-24-103.us-east-2.compute.amazonaws.com/items/${id}/`,
   // );
   http.get(
-    `http://ec2-52-15-218-131.us-east-2.compute.amazonaws.com:5000/${id}/`,
+    `http://ec2-52-15-218-131.us-east-2.compute.amazonaws.com:5000/items/${id}/`,
   );
 }

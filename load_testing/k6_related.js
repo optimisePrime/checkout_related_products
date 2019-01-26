@@ -10,7 +10,10 @@ export default function() {
   const products = Math.floor(Math.random() * 10) + 1;
   const notPopular = Math.floor(Math.random() * 9999000) + 1000;
   const id = products > 8 ? notPopular : Math.floor(Math.random() * 1000) + 1;
+  // http.get(
+  //   `http://ec2-3-16-24-103.us-east-2.compute.amazonaws.com/items/${id}/related`,
+  // );
   http.get(
-    `http://ec2-3-16-24-103.us-east-2.compute.amazonaws.com/items/${id}/related`,
+    `http://ec2-52-15-218-131.us-east-2.compute.amazonaws.com:5000/items/${id}/`,
   );
 }
